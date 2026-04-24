@@ -243,18 +243,18 @@ textarea::placeholder{color:var(--tx3);font-style:italic}
 
 <div class="qz" id="q3a"><h4>A clearinghouse receives a batch of claims from a billing office, checks them for formatting errors, converts them to the payer's required format, and forwards them. Which function does the clearinghouse primarily serve in this process?</h4>
 <div class="os">
-<button class="op" onclick="chk(this,false,'q3a','Adjudication is the payer\'s decision process — not the clearinghouse\'s role. The clearinghouse prepares claims for the payer.','clear')">Adjudication of claims for payment</button>
-<button class="op" onclick="chk(this,true,'q3a','Correct! The clearinghouse acts as an intermediary that scrubs claims for errors, converts them to standardized or payer-specific formats, and routes them to the correct payer. It does NOT make payment decisions — that is the payer\'s role during adjudication.','clear')">Intermediary that scrubs, converts, and routes claims to the correct payer</button>
+<button class="op" onclick="chk(this,false,'q3a','Adjudication is the payer’s decision process — not the clearinghouse’s role. The clearinghouse prepares claims for the payer.','clear')">Adjudication of claims for payment</button>
+<button class="op" onclick="chk(this,true,'q3a','Correct! The clearinghouse acts as an intermediary that scrubs claims for errors, converts them to standardized or payer-specific formats, and routes them to the correct payer. It does NOT make payment decisions — that is the payer’s role during adjudication.','clear')">Intermediary that scrubs, converts, and routes claims to the correct payer</button>
 <button class="op" onclick="chk(this,false,'q3a','Payment posting is done by the billing office after receiving remittance — not by the clearinghouse.','clear')">Payment posting for the provider's patient accounts</button>
 <button class="op" onclick="chk(this,false,'q3a','Medical necessity is evaluated by the payer during adjudication, not by the clearinghouse during claim scrubbing.','clear')">Determination of medical necessity for services</button>
 </div><div class="fb" id="q3a-fb"></div></div>
 
 <div class="qz" id="q3b"><h4>A common data file used in claims processing contains standardized information elements that allow different systems to interpret claim data uniformly. Which of the following best describes why this standardization matters?</h4>
 <div class="os">
-<button class="op" onclick="chk(this,false,'q3b','Standardization doesn\'t eliminate the need for clearinghouses — they still perform scrubbing and routing.','clear')">It eliminates the need for clearinghouses entirely</button>
+<button class="op" onclick="chk(this,false,'q3b','Standardization doesn’t eliminate the need for clearinghouses — they still perform scrubbing and routing.','clear')">It eliminates the need for clearinghouses entirely</button>
 <button class="op" onclick="chk(this,false,'q3b','Standardized data files deal with data elements, not medical documentation content.','clear')">It ensures that clinical notes are formatted consistently</button>
 <button class="op" onclick="chk(this,true,'q3b','Correct! A common data file standardizes the data elements so that different systems (provider, clearinghouse, payer) can interpret claim information consistently. Without standardization, data translation errors would cause widespread processing failures.','clear')">It ensures that providers, clearinghouses, and payers can all interpret the same data elements correctly</button>
-<button class="op" onclick="chk(this,false,'q3b','Standardization reduces errors but doesn\'t guarantee payment — payer adjudication still determines payment.','clear')">It guarantees that all claims will be paid as submitted</button>
+<button class="op" onclick="chk(this,false,'q3b','Standardization reduces errors but doesn’t guarantee payment — payer adjudication still determines payment.','clear')">It guarantees that all claims will be paid as submitted</button>
 </div><div class="fb" id="q3b-fb"></div></div>
 
 <button class="btn-comp" id="c3" onclick="cs(3)">✓ Complete</button>
@@ -281,8 +281,8 @@ textarea::placeholder{color:var(--tx3);font-style:italic}
 
 <div class="qz" id="q4a"><h4>During adjudication, a payer determines that a service is classified as a "noncovered benefit" under the patient's plan. What does this mean for the claim?</h4>
 <div class="os">
-<button class="op" onclick="chk(this,false,'q4a','A noncovered benefit is not an authorization issue — it is a plan exclusion. The service simply isn\'t included in the patient\'s benefit package.','adj')">The service requires prior authorization before it can be considered</button>
-<button class="op" onclick="chk(this,true,'q4a','Correct! A noncovered benefit means the patient\'s plan does not include this service in its covered benefits. The payer will not pay regardless of medical necessity. The patient may be responsible for the full charge depending on provider/patient agreements.','adj')">The patient's plan excludes this service from coverage — the payer will not pay for it</button>
+<button class="op" onclick="chk(this,false,'q4a','A noncovered benefit is not an authorization issue — it is a plan exclusion. The service simply isn’t included in the patient’s benefit package.','adj')">The service requires prior authorization before it can be considered</button>
+<button class="op" onclick="chk(this,true,'q4a','Correct! A noncovered benefit means the patient’s plan does not include this service in its covered benefits. The payer will not pay regardless of medical necessity. The patient may be responsible for the full charge depending on provider/patient agreements.','adj')">The patient's plan excludes this service from coverage — the payer will not pay for it</button>
 <button class="op" onclick="chk(this,false,'q4a','A noncovered benefit is different from a coding error. The service itself is excluded from the plan — it is a coverage issue, not a claim accuracy issue.','adj')">The claim has a coding error that needs correction before resubmission</button>
 <button class="op" onclick="chk(this,false,'q4a','Suspense means the claim is pending review. A noncovered benefit determination means the payer has already made a coverage decision.','adj')">The claim is placed in suspense pending additional review</button>
 </div><div class="fb" id="q4a-fb"></div></div>
@@ -320,7 +320,7 @@ textarea::placeholder{color:var(--tx3);font-style:italic}
 <div class="os">
 <button class="op" onclick="chk(this,false,'q5b','The billed charge is what the provider charges — the allowed amount is typically less than the billed charge for contracted providers.','cob')">The total amount the provider bills for a service</button>
 <button class="op" onclick="chk(this,true,'q5b','Correct! The allowed charge is the maximum amount the payer will consider for a service based on their fee schedule or contracted rate. The difference between the billed charge and the allowed charge is the contractual adjustment (write-off) for PAR providers.','cob')">The maximum amount the payer considers payable for a service based on their fee schedule</button>
-<button class="op" onclick="chk(this,false,'q5b','The deductible is the patient\'s responsibility before insurance starts paying — it is not the same as the allowed charge.','cob')">The patient's annual deductible amount</button>
+<button class="op" onclick="chk(this,false,'q5b','The deductible is the patient’s responsibility before insurance starts paying — it is not the same as the allowed charge.','cob')">The patient's annual deductible amount</button>
 </div><div class="fb" id="q5b-fb"></div></div>
 
 <div class="qz" id="q5c"><h4>An "unauthorized service" in the context of claims processing most likely refers to:</h4>
@@ -357,8 +357,8 @@ textarea::placeholder{color:var(--tx3);font-style:italic}
 <div class="qz" id="q6b"><h4>A remittance advice shows a payment of $0 with the remark "applied to deductible." The billing specialist should interpret this as:</h4>
 <div class="os">
 <button class="op" onclick="chk(this,false,'q6b','This is not a claim error — the payer correctly processed the claim and applied the amount to the deductible. This is normal adjudication.','rem')">An error requiring claim resubmission</button>
-<button class="op" onclick="chk(this,true,'q6b','Correct! The payer processed the claim normally but the allowed amount was applied to the patient\'s unmet deductible. The patient owes the deductible amount. This is standard adjudication — not a denial or error.','rem')">Normal processing — the patient is responsible for the deductible amount and should be billed accordingly</button>
-<button class="op" onclick="chk(this,false,'q6b','This is not a coverage exclusion — the service IS covered, but the patient hasn\'t met their deductible yet.','rem')">A coverage exclusion requiring an appeal</button>
+<button class="op" onclick="chk(this,true,'q6b','Correct! The payer processed the claim normally but the allowed amount was applied to the patient’s unmet deductible. The patient owes the deductible amount. This is standard adjudication — not a denial or error.','rem')">Normal processing — the patient is responsible for the deductible amount and should be billed accordingly</button>
+<button class="op" onclick="chk(this,false,'q6b','This is not a coverage exclusion — the service IS covered, but the patient hasn’t met their deductible yet.','rem')">A coverage exclusion requiring an appeal</button>
 </div><div class="fb" id="q6b-fb"></div></div>
 
 <button class="btn-comp" id="c6" onclick="cs(6)">✓ Complete</button>
@@ -381,8 +381,8 @@ textarea::placeholder{color:var(--tx3);font-style:italic}
 <div class="qz" id="q7a"><h4>A patient's account has an outstanding balance of $240 that is 120 days past due despite multiple statements and a phone call. The patient has not responded. According to standard collections workflow, what would typically happen next?</h4>
 <div class="os">
 <button class="op" onclick="chk(this,false,'q7a','120 days past due is not the point to write off without further effort — the account should be escalated first.','coll')">Immediately write off the balance as bad debt</button>
-<button class="op" onclick="chk(this,true,'q7a','Correct! After internal collection efforts have been exhausted (statements, calls), the account may be referred to a third-party collection agency before being written off as bad debt. The practice should follow its collection policy and applicable regulations regarding patient notification before sending to collections.','coll')">Refer the account to a third-party collection agency following the practice\'s collection policy</button>
-<button class="op" onclick="chk(this,false,'q7a','Resubmitting the claim to insurance won\'t help — this is a patient balance, not an insurance issue.','coll')">Resubmit the claim to the patient\'s insurance</button>
+<button class="op" onclick="chk(this,true,'q7a','Correct! After internal collection efforts have been exhausted (statements, calls), the account may be referred to a third-party collection agency before being written off as bad debt. The practice should follow its collection policy and applicable regulations regarding patient notification before sending to collections.','coll')">Refer the account to a third-party collection agency following the practice’s collection policy</button>
+<button class="op" onclick="chk(this,false,'q7a','Resubmitting the claim to insurance won’t help — this is a patient balance, not an insurance issue.','coll')">Resubmit the claim to the patient’s insurance</button>
 </div><div class="fb" id="q7a-fb"></div></div>
 
 <button class="btn-comp" id="c7" onclick="cs(7)">✓ Complete</button>
@@ -404,29 +404,29 @@ textarea::placeholder{color:var(--tx3);font-style:italic}
 </div><div class="fb" id="pa1-fb"></div></div>
 
 <div class="qz" id="pa2"><h4>2. A payer determines that a service is not included in the patient's benefit plan. This is classified as a:</h4><div class="os">
-<button class="op" onclick="chk(this,false,'pa2','A deductible is the patient\'s out-of-pocket amount before insurance pays — not a coverage exclusion.','prac')">Deductible</button>
-<button class="op" onclick="chk(this,true,'pa2','Correct! A noncovered benefit is a service that the patient\'s plan does not include in its benefit package. The payer will not pay for it regardless of medical necessity.','prac')">Noncovered benefit</button>
+<button class="op" onclick="chk(this,false,'pa2','A deductible is the patient’s out-of-pocket amount before insurance pays — not a coverage exclusion.','prac')">Deductible</button>
+<button class="op" onclick="chk(this,true,'pa2','Correct! A noncovered benefit is a service that the patient’s plan does not include in its benefit package. The payer will not pay for it regardless of medical necessity.','prac')">Noncovered benefit</button>
 <button class="op" onclick="chk(this,false,'pa2','Suspense means the claim is pending review — not that the service is excluded.','prac')">Claim in suspense</button>
-<button class="op" onclick="chk(this,false,'pa2','Coinsurance is the patient\'s percentage share of covered services — not an exclusion.','prac')">Coinsurance</button>
+<button class="op" onclick="chk(this,false,'pa2','Coinsurance is the patient’s percentage share of covered services — not an exclusion.','prac')">Coinsurance</button>
 </div><div class="fb" id="pa2-fb"></div></div>
 
 <div class="qz" id="pa3"><h4>3. The ANSI X12 835 transaction standard is used for:</h4><div class="os">
 <button class="op" onclick="chk(this,false,'pa3','The 837 is for claim submission. The 835 is for remittance.','prac')">Submitting claims electronically</button>
-<button class="op" onclick="chk(this,true,'pa3','Correct! The X12 835 is the standard for Electronic Remittance Advice (ERA) — the payer\'s electronic response showing payment details, adjustments, and reasons.','prac')">Electronic Remittance Advice (ERA)</button>
+<button class="op" onclick="chk(this,true,'pa3','Correct! The X12 835 is the standard for Electronic Remittance Advice (ERA) — the payer’s electronic response showing payment details, adjustments, and reasons.','prac')">Electronic Remittance Advice (ERA)</button>
 <button class="op" onclick="chk(this,false,'pa3','Eligibility verification uses a different transaction standard (270/271).','prac')">Verifying patient eligibility</button>
 <button class="op" onclick="chk(this,false,'pa3','Referral authorization uses a different transaction standard (278).','prac')">Requesting prior authorization</button>
 </div><div class="fb" id="pa3-fb"></div></div>
 
 <div class="qz" id="pa4"><h4>4. Coordination of Benefits primarily prevents:</h4><div class="os">
-<button class="op" onclick="chk(this,false,'pa4','COB doesn\'t prevent claim submission — it determines payer order and prevents overpayment.','prac')">Providers from submitting claims</button>
+<button class="op" onclick="chk(this,false,'pa4','COB doesn’t prevent claim submission — it determines payer order and prevents overpayment.','prac')">Providers from submitting claims</button>
 <button class="op" onclick="chk(this,true,'pa4','Correct! COB ensures that when a patient has multiple insurance plans, the combined payments do not exceed the total allowed amount for the service — preventing duplicate payment or overpayment.','prac')">Overpayment when a patient has multiple insurance plans</button>
-<button class="op" onclick="chk(this,false,'pa4','Patients can still have multiple plans — COB coordinates how they pay, it doesn\'t prevent dual coverage.','prac')">Patients from having two insurance plans</button>
+<button class="op" onclick="chk(this,false,'pa4','Patients can still have multiple plans — COB coordinates how they pay, it doesn’t prevent dual coverage.','prac')">Patients from having two insurance plans</button>
 </div><div class="fb" id="pa4-fb"></div></div>
 
 <div class="qz" id="pa5"><h4>5. A claim passes all clearinghouse edits and is forwarded to the payer. The payer then reviews the claim, checks benefits, and makes a payment determination. The payer's review process is called:</h4><div class="os">
 <button class="op" onclick="chk(this,false,'pa5','Claim scrubbing is done by the clearinghouse, not the payer.','prac')">Claim scrubbing</button>
-<button class="op" onclick="chk(this,false,'pa5','Claim submission is the provider\'s action of sending the claim — not the payer\'s review.','prac')">Claim submission</button>
-<button class="op" onclick="chk(this,true,'pa5','Correct! Claims adjudication is the payer\'s process of reviewing, evaluating, and making a payment determination on a submitted claim. It includes eligibility verification, benefit application, and coverage decisions.','prac')">Claims adjudication</button>
+<button class="op" onclick="chk(this,false,'pa5','Claim submission is the provider’s action of sending the claim — not the payer’s review.','prac')">Claim submission</button>
+<button class="op" onclick="chk(this,true,'pa5','Correct! Claims adjudication is the payer’s process of reviewing, evaluating, and making a payment determination on a submitted claim. It includes eligibility verification, benefit application, and coverage decisions.','prac')">Claims adjudication</button>
 <button class="op" onclick="chk(this,false,'pa5','Remittance is the RESULT of adjudication — the payment explanation sent back. Adjudication is the process itself.','prac')">Remittance processing</button>
 </div><div class="fb" id="pa5-fb"></div></div>
 
@@ -543,14 +543,14 @@ const fcData=[
 {term:'Electronic Data Interchange (EDI)',def:'The standardized electronic exchange of healthcare data between entities using agreed-upon formats.',clue:'Think: digital highway for claim data. Replaces paper and fax.'},
 {term:'Value-Added Network (VAN)',def:'A private network that facilitates secure EDI transactions between healthcare trading partners.',clue:'The infrastructure that carries EDI data — like a secure postal service for electronic claims.'},
 {term:'Clearinghouse',def:'An intermediary that receives, scrubs, reformats, and routes electronic claims between providers and payers.',clue:'Quality control checkpoint — catches errors BEFORE the payer sees the claim.'},
-{term:'Covered Entity',def:'Under HIPAA: health plans, healthcare clearinghouses, and providers who conduct electronic transactions.',clue:'If you transmit electronic health transactions, you\'re likely a covered entity with HIPAA obligations.'},
+{term:'Covered Entity',def:'Under HIPAA: health plans, healthcare clearinghouses, and providers who conduct electronic transactions.',clue:'If you transmit electronic health transactions, you’re likely a covered entity with HIPAA obligations.'},
 {term:'Clean Claim',def:'A claim with no errors — complete, accurate, and ready for adjudication. Does NOT guarantee payment.',clue:'Clean = properly constructed. But payer can still deny for coverage, auth, or medical necessity reasons.'},
-{term:'Claims Adjudication',def:'The payer\'s process of reviewing, evaluating, and making a payment determination on a claim.',clue:'The payer\'s decision-making process: verify eligibility → apply benefits → determine coverage → decide payment.'},
-{term:'Noncovered Benefit',def:'A service that is excluded from the patient\'s benefit plan — the payer will not pay regardless of medical necessity.',clue:'Plan exclusion, not a claim error. The service simply isn\'t in the benefit package.'},
-{term:'Coordination of Benefits (COB)',def:'Rules that determine payer order and prevent overpayment when a patient has multiple insurance plans.',clue:'Primary pays first, secondary considers remainder. Combined payments shouldn\'t exceed the allowed amount.'},
+{term:'Claims Adjudication',def:'The payer’s process of reviewing, evaluating, and making a payment determination on a claim.',clue:'The payer’s decision-making process: verify eligibility → apply benefits → determine coverage → decide payment.'},
+{term:'Noncovered Benefit',def:'A service that is excluded from the patient’s benefit plan — the payer will not pay regardless of medical necessity.',clue:'Plan exclusion, not a claim error. The service simply isn’t in the benefit package.'},
+{term:'Coordination of Benefits (COB)',def:'Rules that determine payer order and prevent overpayment when a patient has multiple insurance plans.',clue:'Primary pays first, secondary considers remainder. Combined payments shouldn’t exceed the allowed amount.'},
 {term:'Claims Attachment',def:'Additional documentation (operative notes, medical records) sent with or following a claim to support services billed.',clue:'Extra proof — sent when the payer needs more information than codes alone provide.'},
 {term:'Allowed Charge',def:'The maximum amount the payer considers payable for a service based on their fee schedule or contract.',clue:'The real number that matters — everything else (coinsurance, write-off) is calculated from this.'},
-{term:'Electronic Remittance Advice (ERA)',def:'The electronic payment explanation from the payer showing what was paid, denied, adjusted, and why. Uses X12 835 format.',clue:'The payer\'s answer to your claim — in electronic format. 835 = remittance (837 = submission).'},
+{term:'Electronic Remittance Advice (ERA)',def:'The electronic payment explanation from the payer showing what was paid, denied, adjusted, and why. Uses X12 835 format.',clue:'The payer’s answer to your claim — in electronic format. 835 = remittance (837 = submission).'},
 {term:'Suspense',def:'A claim status indicating the payer needs more time or information before making a final determination.',clue:'Not denied, not paid — just held. The payer is still deciding.'},
 {term:'Delinquent Account',def:'A patient account with a balance that is past due beyond the expected payment timeframe.',clue:'The clock is ticking — follow up before it becomes bad debt.'},
 {term:'Bad Debt',def:'An account balance determined to be uncollectable after all reasonable collection efforts have been exhausted.',clue:'The last stage — revenue is written off. Prevention through timely follow-up is key.'},
@@ -607,7 +607,78 @@ function shuffleArrayInPlace(arr){
   }
   return arr;
 }
+
+
+// ===== BALANCE ANSWER LENGTHS =====
+// Randomization alone is not enough if the correct answer is always the longest.
+// These helpers add neutral, test-safe wording to shorter choices so students cannot rely on length clues.
+const neutralLengthPhrases=[
+  'based on the claim information provided',
+  'according to routine payer-processing rules',
+  'when the documentation is reviewed carefully',
+  'within the standard billing workflow',
+  'after checking the submitted claim details',
+  'using normal claims-processing logic',
+  'as part of the payer review process',
+  'when applying standard coverage rules'
+];
+function pickNeutralPhrase(seed){return neutralLengthPhrases[Math.abs(seed)%neutralLengthPhrases.length]}
+function cleanLen(s){return String(s||'').replace(/\s+/g,' ').trim().length}
+function isCorrectStaticButton(btn){return (btn.getAttribute('onclick')||'').includes('chk(this,true')}
+function appendNeutralText(btn,seed){
+  const span=document.createElement('span');
+  span.className='length-balancer';
+  span.textContent=' — '+pickNeutralPhrase(seed);
+  btn.appendChild(span);
+}
+function balanceStaticAnswerLengths(){
+  document.querySelectorAll('.qz .os').forEach((os,groupIndex)=>{
+    if(os.id==='cqO')return;
+    const buttons=Array.from(os.querySelectorAll(':scope > button.op'));
+    if(buttons.length<2)return;
+
+    let lengths=buttons.map(b=>cleanLen(b.textContent));
+    let target=Math.max(...lengths);
+
+    buttons.forEach((btn,i)=>{
+      if(cleanLen(btn.textContent)<target-14){
+        appendNeutralText(btn,groupIndex+i);
+      }
+    });
+
+    // If the correct answer is still the longest, deliberately make one wrong answer a little longer.
+    const correct=buttons.find(isCorrectStaticButton);
+    if(correct){
+      const wrongs=buttons.filter(b=>b!==correct);
+      const maxAfter=Math.max(...buttons.map(b=>cleanLen(b.textContent)));
+      if(cleanLen(correct.textContent)>=maxAfter-3 && wrongs.length){
+        wrongs.sort((a,b)=>cleanLen(a.textContent)-cleanLen(b.textContent));
+        appendNeutralText(wrongs[0],groupIndex+99);
+      }
+    }
+  });
+}
+function balanceChallengeOptions(opts){
+  let target=Math.max(...opts.map(o=>cleanLen(o.text)));
+  opts.forEach((opt,i)=>{
+    if(cleanLen(opt.text)<target-14){
+      opt.text=opt.text+' — '+pickNeutralPhrase(i);
+    }
+  });
+  const correct=opts.find(o=>o.correct);
+  if(correct){
+    const maxAfter=Math.max(...opts.map(o=>cleanLen(o.text)));
+    if(cleanLen(correct.text)>=maxAfter-3){
+      const wrongs=opts.filter(o=>!o.correct).sort((a,b)=>cleanLen(a.text)-cleanLen(b.text));
+      if(wrongs.length){
+        wrongs[0].text=wrongs[0].text+' — '+pickNeutralPhrase(maxAfter+7);
+      }
+    }
+  }
+  return opts;
+}
 function randomizeStaticQuizAnswers(){
+  balanceStaticAnswerLengths();
   document.querySelectorAll('.qz .os').forEach(os=>{
     if(os.id==='cqO')return;
     const buttons=Array.from(os.querySelectorAll(':scope > button.op'));
@@ -626,9 +697,9 @@ const cQs=[
 {q:'Under HIPAA, which of the following is classified as a covered entity required to follow electronic transaction standards?',o:['A pharmaceutical company','A healthcare clearinghouse','A medical device manufacturer','The patient'],a:1,r:'Clearinghouses are covered entities that must comply with HIPAA electronic transaction standards.'},
 {q:'The ANSI X12 837 transaction standard is used for:',o:['Electronic remittance','Claim submission','Eligibility inquiry','Prior authorization'],a:1,r:'837 = claim submission. 835 = remittance. 270/271 = eligibility. 278 = authorization.'},
 {q:'A Value-Added Network (VAN) primarily serves as:',o:['A payer adjudication system','A secure network for EDI transactions','A patient portal','A clearinghouse'],a:1,r:'A VAN is the infrastructure for secure electronic data interchange between trading partners.'},
-{q:'Claims adjudication is the process by which:',o:['The provider submits claims electronically','The clearinghouse scrubs claims for errors','The payer reviews and determines payment on a claim','The patient pays their copay'],a:2,r:'Adjudication = payer\'s review and payment decision process.'},
-{q:'A "noncovered benefit" means:',o:['The service needs prior authorization','The service is excluded from the plan benefits','The claim has a formatting error','The patient has secondary insurance'],a:1,r:'Noncovered = the plan does not include this service. Payer won\'t pay.'},
-{q:'The allowed charge represents:',o:['The provider\'s full billed amount','The maximum the payer will consider based on their fee schedule','The patient\'s deductible','The copay amount'],a:1,r:'Allowed charge = payer\'s maximum payable amount for the service.'},
+{q:'Claims adjudication is the process by which:',o:['The provider submits claims electronically','The clearinghouse scrubs claims for errors','The payer reviews and determines payment on a claim','The patient pays their copay'],a:2,r:'Adjudication = payer’s review and payment decision process.'},
+{q:'A "noncovered benefit" means:',o:['The service needs prior authorization','The service is excluded from the plan benefits','The claim has a formatting error','The patient has secondary insurance'],a:1,r:'Noncovered = the plan does not include this service. Payer won’t pay.'},
+{q:'The allowed charge represents:',o:['The provider’s full billed amount','The maximum the payer will consider based on their fee schedule','The patient’s deductible','The copay amount'],a:1,r:'Allowed charge = payer’s maximum payable amount for the service.'},
 {q:'COB rules primarily prevent:',o:['Claim submission','Overpayment with multiple insurances','Patient registration','Coding errors'],a:1,r:'COB coordinates multiple payers to prevent overpayment.'},
 {q:'A claim in "suspense" status means:',o:['It has been paid in full','It was permanently denied','The payer needs more time or information','It was rejected by the clearinghouse'],a:2,r:'Suspense = held for further review. Not yet a final decision.'},
 {q:'The ERA uses which ANSI transaction standard?',o:['X12 837','X12 835','X12 270','X12 278'],a:1,r:'835 = Electronic Remittance Advice. 837 = claim submission.'},
@@ -644,6 +715,7 @@ function makeChallengeRound(){
   activeChallengeQuestions=cQs.map(q=>{
     const opts=q.o.map((text,index)=>({text:text,correct:index===q.a}));
     shuffleArrayInPlace(opts);
+    balanceChallengeOptions(opts);
     return {
       q:q.q,
       r:q.r,
