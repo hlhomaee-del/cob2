@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Claims Processing and Adjudication Lab</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+:root{
+--bg:#EFECEA;--bg2:#FBF9F6;--card:rgba(255,255,255,.85);--glass:rgba(255,255,255,.6);--tx:#181614;--tx2:#555250;--tx3:#959090;
+--pri:#1B5FA0;--pri2:#103F6E;--priL:#DCF0FD;
+--grn:#1A7040;--grnL:#DEF5E7;--grn2:#0D5028;
+--org:#BF5000;--orgL:#FFF0E2;
+--red:#AB1C1C;--redL:#FDEBEB;
+--pur:#5A2E90;--purL:#EDE5F9;
+--teal:#006860;--tealL:#DDF1EF;
+--gold:#B08800;--goldL:#FFF8DE;
+--rose:#9B0E4F;--roseL:#FCE0EA;
+--navy:#1A2842;--navyL:#E8ECF2;
+--bdr:rgba(200,195,188,.6);--shd:0 2px 12px rgba(24,22,20,.05);--shd2:0 8px 30px rgba(24,22,20,.1);--shd3:0 16px 48px rgba(24,22,20,.14);
+--blur:blur(12px);
+--r:10px;--r2:16px;--r3:24px;
+--hd:'Playfair Display',Georgia,serif;--bd:'Outfit','Segoe UI',sans-serif;--mn:'Fira Code',monospace;
+--ease:cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.65;font-size:15px;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 30%,rgba(27,95,160,.05),transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(0,104,96,.04),transparent 50%),radial-gradient(ellipse at 50% 50%,rgba(90,46,144,.03),transparent 55%);z-index:-1;pointer-events:none}
+
+/* HEADER */
+.hdr{background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.04)}
+.hdr-in{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;max-width:1280px;margin:0 auto}
+.hdr-logo h1{font-family:var(--hd);font-size:14px;font-weight:700;color:var(--pri2)}
+.hdr-logo span{font-size:10px;color:var(--tx3);letter-spacing:.5px}
+.hdr-st{display:flex;gap:10px;align-items:center}
+.pl{display:flex;align-items:center;gap:3px;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;backdrop-filter:var(--blur);background:rgba(255,255,255,.5)}
+.pl-s{color:var(--grn2)}.pl-k{color:#7A5C00}.pl-b{color:var(--pur)}
+.snd-b{padding:2px 8px;border-radius:7px;border:1px solid var(--bdr);background:var(--glass);font-size:9px;font-weight:600;color:var(--tx2);cursor:pointer;backdrop-filter:var(--blur)}
+.gp{height:3px;background:rgba(200,195,188,.4)}.gp-f{height:100%;background:linear-gradient(90deg,var(--teal),var(--pri),var(--pur),var(--rose));width:0%;transition:width .7s var(--ease)}
+
+/* NAV */
+.nav-w{background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--bdr);overflow-x:auto;scrollbar-width:none}.nav-w::-webkit-scrollbar{display:none}
+.nav{display:flex;max-width:1280px;margin:0 auto;padding:0 6px;gap:1px}
+.nb{flex-shrink:0;padding:7px 10px;border:none;background:0;font-family:var(--bd);font-size:10px;font-weight:500;color:var(--tx3);cursor:pointer;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap}
+.nb:hover{color:var(--pri);background:rgba(221,240,253,.5)}.nb.a{color:var(--pri2);font-weight:700;border-bottom-color:var(--pri)}
+.nb .tn{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:rgba(200,195,188,.5);font-size:7px;font-weight:800;margin-right:2px}
+.nb.a .tn{background:var(--pri);color:#fff}.nb.d .tn{background:var(--grn);color:#fff}
+
+/* MAIN */
+.mn{max-width:940px;margin:0 auto;padding:20px 14px 60px}
+.pn{display:none;animation:fu .4s var(--ease)}.pn.a{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+
+/* GLASS CARD */
+.gc{background:var(--card);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--bdr);border-radius:var(--r2);padding:20px;margin-bottom:14px;box-shadow:var(--shd);transition:.25s var(--ease)}
+.gc:hover{box-shadow:var(--shd2);transform:translateY(-1px)}
+.gc h3{font-family:var(--hd);font-size:16px;margin-bottom:7px}
+
+/* SECTION HEADER */
+.sh{text-align:center;padding:26px 14px;margin-bottom:20px;border-radius:var(--r3);border:1px solid var(--bdr);background:var(--card);backdrop-filter:var(--blur);position:relative;overflow:hidden}
+.sh::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(27,95,160,.04)}
+.sh h2{font-family:var(--hd);font-size:20px;color:var(--pri2);margin-bottom:4px;position:relative}
+.sh p{font-size:12px;color:var(--tx2);max-width:520px;margin:0 auto;position:relative}
+
+/* BADGES */
+.bg{display:inline-flex;padding:2px 7px;border-radius:8px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.bg-b{background:var(--priL);color:var(--pri)}.bg-g{background:var(--grnL);color:var(--grn)}.bg-o{background:var(--orgL);color:var(--org)}.bg-r{background:var(--redL);color:var(--red)}.bg-p{background:var(--purL);color:var(--pur)}.bg-t{background:var(--tealL);color:var(--teal)}
+
+/* QUIZ */
+.qz{background:var(--card);backdrop-filter:var(--blur);border:2px solid var(--bdr);border-radius:var(--r2);padding:18px;margin:12px 0}
+.qz h4{font-family:var(--hd);color:var(--pri2);margin-bottom:7px;font-size:13px}
+.os{display:flex;flex-direction:column;gap:5px;margin:8px 0}
+.op{padding:8px 14px;border-radius:var(--r);border:2px solid var(--bdr);background:var(--card);font-family:var(--bd);font-size:12px;cursor:pointer;transition:.2s;text-align:left;line-height:1.5}
+.op:hover{border-color:var(--pri);background:var(--priL)}
+.op.c{border-color:var(--grn);background:var(--grnL);color:var(--grn2)}.op.w{border-color:var(--red);background:var(--redL);color:var(--red)}.op.x{pointer-events:none;opacity:.85}
+.fb{margin-top:8px;padding:10px 12px;border-radius:var(--r);font-size:11px;display:none;line-height:1.6}
+.fb.c{display:block;background:var(--grnL);border:1px solid #A5D6A7;color:var(--grn2)}.fb.w{display:block;background:var(--redL);border:1px solid #EF9A9A;color:var(--red)}
+
+/* CALLOUT */
+.cl{border-radius:var(--r);padding:10px 12px;margin:8px 0;font-size:11px}
+.cl.tip{background:var(--grnL);border:1px solid #A5D6A7;border-left:4px solid var(--grn)}
+.cl.info{background:var(--priL);border:1px solid #90CAF9;border-left:4px solid var(--pri)}
+.cl.think{background:var(--purL);border:1px solid #CE93D8;border-left:4px solid var(--pur)}
+.cl-l{font-weight:700;font-size:8px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.cl.tip .cl-l{color:var(--grn)}.cl.info .cl-l{color:var(--pri)}.cl.think .cl-l{color:var(--pur)}
+
+/* ===== FLASHCARD STUDIO ===== */
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:12px 0}
+.fc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:16px;transition:.3s;cursor:default;position:relative;min-height:140px}
+.fc:hover{box-shadow:var(--shd2)}
+.fc .fc-term{font-family:var(--hd);font-size:14px;color:var(--pri2);margin-bottom:6px}
+.fc .fc-def{font-size:11px;color:var(--tx2);line-height:1.5;display:none}
+.fc .fc-clue{font-size:10px;color:var(--pur);margin-top:6px;font-style:italic;display:none}
+.fc.revealed .fc-def,.fc.revealed .fc-clue{display:block}
+.fc .fc-reveal{font-size:10px;font-weight:700;color:var(--pri);cursor:pointer;margin-top:8px}
+.fc.revealed .fc-reveal{display:none}
+.fc-btns{display:flex;gap:6px;margin-top:10px}
+.fc-btn{padding:5px 12px;border-radius:10px;font-size:10px;font-weight:700;cursor:pointer;border:none;transition:.2s;font-family:var(--bd)}
+.fc-btn.know{background:var(--grnL);color:var(--grn2)}.fc-btn.know:hover{background:var(--grn);color:#fff}
+.fc-btn.study{background:var(--orgL);color:var(--org)}.fc-btn.study:hover{background:var(--org);color:#fff}
+.fc.sorted-know{border-color:var(--grn);background:var(--grnL);opacity:.7}
+.fc.sorted-study{border-color:var(--org);background:var(--orgL)}
+.fc-counter{display:flex;gap:16px;justify-content:center;margin:12px 0;font-size:12px;font-weight:700}
+.fc-counter .know-ct{color:var(--grn)}.fc-counter .study-ct{color:var(--org)}
+
+/* NEXT NAV */
+.nn{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding:14px 0;border-top:1px solid var(--bdr)}
+.btn-nx{display:inline-flex;align-items:center;gap:6px;padding:14px 32px;border-radius:24px;border:none;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;font-family:var(--bd);font-size:14px;font-weight:700;cursor:pointer;transition:.3s var(--ease);box-shadow:0 4px 18px rgba(27,95,160,.25);letter-spacing:.3px}
+.btn-nx:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(27,95,160,.35)}
+.btn-pv{display:inline-flex;align-items:center;gap:4px;padding:9px 18px;border-radius:18px;border:2px solid var(--bdr);background:var(--glass);color:var(--tx2);font-family:var(--bd);font-size:11px;font-weight:600;cursor:pointer;backdrop-filter:var(--blur)}
+.btn-pv:hover{border-color:var(--pri);color:var(--pri)}
+
+.btn-comp{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;padding:10px;border-radius:var(--r);border:2px solid var(--grn);background:var(--grnL);color:var(--grn2);font-family:var(--bd);font-size:13px;font-weight:700;cursor:pointer;margin-top:16px}
+.btn-comp:hover{background:var(--grn);color:#fff}.btn-comp.dn{background:var(--grn);color:#fff;cursor:default}
+
+.timer{font-family:var(--mn);font-size:20px;font-weight:700;color:var(--red);text-align:center;margin:8px 0}
+
+/* SUMMARY */
+.sum-box{background:var(--card);backdrop-filter:var(--blur);border:2px solid var(--pri);border-radius:var(--r3);padding:18px;margin:10px 0}
+.sum-box h3{font-family:var(--hd);color:var(--pri2);margin-bottom:8px;font-size:14px}
+.sum-r{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--bdr);font-size:11px}.sum-r:last-child{border:none}
+.sum-r .sl{font-weight:600;color:var(--tx2)}.sum-r .sv{font-weight:700;color:var(--pri)}
+.copy-a{width:100%;min-height:80px;padding:8px;border:2px dashed var(--pri);border-radius:var(--r);font-family:var(--mn);font-size:9px;background:var(--bg);margin:8px 0;white-space:pre-wrap}
+.btn-copy{display:inline-flex;align-items:center;gap:4px;background:var(--pur);color:#fff;padding:10px 22px;font-size:12px;font-weight:700;border:none;border-radius:var(--r);cursor:pointer;font-family:var(--bd)}.btn-copy:hover{background:var(--pri2)}
+textarea{width:100%;min-height:45px;padding:7px 9px;border:1px solid var(--bdr);border-radius:var(--r);font-family:var(--bd);font-size:11px;resize:vertical;background:var(--glass)}
+textarea:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 2px rgba(27,95,160,.08)}
+textarea::placeholder{color:var(--tx3);font-style:italic}
+
+.toast{position:fixed;top:56px;right:14px;padding:7px 14px;border-radius:var(--r);background:var(--grn);color:#fff;font-weight:700;font-size:10px;z-index:9999;transform:translateX(120%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--shd2)}.toast.show{transform:translateX(0)}
+.ftr{text-align:center;padding:12px;font-size:7px;color:var(--tx3);border-top:1px solid var(--bdr);background:var(--glass)}
+.mob{display:none;padding:3px;border:none;background:0;cursor:pointer;color:var(--tx);font-size:15px}
+@media(max-width:768px){.hdr-st{display:none}.mob{display:block}.mn{padding:10px 8px 50px}.sh{padding:16px 8px}.sh h2{font-size:17px}.gc{padding:14px}.nb{padding:5px 7px;font-size:9px}.fc-grid{grid-template-columns:1fr}.btn-nx{padding:11px 22px;font-size:12px}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast">+10!</div>
+
+<header class="hdr"><div class="hdr-in">
+<div class="hdr-logo"><h1>Claims Processing & Adjudication Lab</h1><span>Chapter 4 · CBCS-Ready · Interactive</span></div>
+<div class="hdr-st">
+<div class="pl pl-s">⭐<span id="sN">0</span></div>
+<div class="pl pl-k">🔥<span id="kN">0</span></div>
+<div class="pl pl-b">🏅<span id="bN">0</span></div>
+<button class="snd-b" onclick="tS()" id="sB">🔊</button>
+</div>
+<button class="mob" onclick="document.querySelector('.hdr-st').style.display=document.querySelector('.hdr-st').style.display==='flex'?'none':'flex'">☰</button>
+</div><div class="gp"><div class="gp-f" id="gF"></div></div></header>
+
+<nav class="nav-w"><div class="nav">
+<button class="nb a" data-t="0"><span class="tn">1</span>Welcome</button>
+<button class="nb" data-t="1"><span class="tn">2</span>Flashcards</button>
+<button class="nb" data-t="2"><span class="tn">3</span>E-Claims</button>
+<button class="nb" data-t="3"><span class="tn">4</span>Clearinghouse</button>
+<button class="nb" data-t="4"><span class="tn">5</span>Adjudication</button>
+<button class="nb" data-t="5"><span class="tn">6</span>COB & Coverage</button>
+<button class="nb" data-t="6"><span class="tn">7</span>Remittance</button>
+<button class="nb" data-t="7"><span class="tn">8</span>Collections</button>
+<button class="nb" data-t="8"><span class="tn">9</span>Practice</button>
+<button class="nb" data-t="9"><span class="tn">10</span>Challenge</button>
+<button class="nb" data-t="10"><span class="tn">11</span>Summary</button>
+</div></nav>
+
+<main class="mn">
+
+<!-- P0 WELCOME -->
+<div class="pn a" id="p0">
+<div class="sh" style="background:linear-gradient(135deg,rgba(221,240,253,.5),var(--card),rgba(221,241,238,.5))">
+<h2>Welcome — Claims Processing Lab</h2>
+<p>Master electronic claims, clearinghouse logic, adjudication, COB, remittance, and collections thinking through interactive practice.</p>
+</div>
+<div class="gc" style="text-align:center">
+<h3>🎯 What You'll Master</h3>
+<p style="font-size:12px;color:var(--tx2);margin-bottom:12px">Electronic claims & EDI · Clearinghouse workflow · Clean claims · Adjudication logic · COB & allowed charges · ERA/EOB interpretation · Collections essentials · CBCS-style reasoning</p>
+<button class="btn-nx" onclick="go(1)">▶ Start Learning</button>
+</div>
+<div class="nn"><span></span><button class="btn-nx" onclick="go(1)">Begin: Flashcard Studio →</button></div>
+</div>
+
+<!-- P1 FLASHCARD STUDIO -->
+<div class="pn" id="p1">
+<div class="sh" style="background:linear-gradient(135deg,rgba(237,229,249,.5),var(--card),rgba(255,248,222,.5))">
+<h2>📚 Key Concept Flashcard Studio</h2>
+<p>Click "Reveal" to see each definition. Then sort: "I Know This" or "Still Studying."</p>
+</div>
+
+<div class="fc-counter">
+<span class="know-ct">✓ I Know: <span id="knowCt">0</span></span>
+<span class="study-ct">📖 Studying: <span id="studyCt">0</span></span>
+</div>
+
+<div class="fc-grid" id="fcGrid"></div>
+
+<div class="nn"><button class="btn-pv" onclick="go(0)">← Welcome</button><button class="btn-nx" onclick="go(2)">Next: Electronic Claims →</button></div>
+</div>
+
+<!-- P2 ELECTRONIC CLAIMS -->
+<div class="pn" id="p2">
+<div class="sh" style="background:linear-gradient(135deg,rgba(221,241,238,.5),var(--card),rgba(221,240,253,.5))">
+<h2>Electronic Claims & Submission</h2>
+<p>Understand how claims are submitted electronically and why the format matters.</p>
+</div>
+
+<div class="gc"><h3>Key Concepts</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+<div style="background:var(--priL);padding:10px;border-radius:var(--r);border-left:3px solid var(--pri)"><h4 style="color:var(--pri);font-size:12px">ANSI ASC X12 837</h4><p style="font-size:11px">The standardized electronic format for submitting healthcare claims. Required under HIPAA for electronic transactions.</p></div>
+<div style="background:var(--tealL);padding:10px;border-radius:var(--r);border-left:3px solid var(--teal)"><h4 style="color:var(--teal);font-size:12px">Electronic Media Claim (EMC)</h4><p style="font-size:11px">Any claim submitted electronically rather than on paper — the standard in modern billing.</p></div>
+<div style="background:var(--purL);padding:10px;border-radius:var(--r);border-left:3px solid var(--pur)"><h4 style="color:var(--pur);font-size:12px">Value-Added Network (VAN)</h4><p style="font-size:11px">A private network that facilitates EDI transactions between trading partners — acts as a secure data highway for claim transmission.</p></div>
+<div style="background:var(--grnL);padding:10px;border-radius:var(--r);border-left:3px solid var(--grn)"><h4 style="color:var(--grn);font-size:12px">Covered Entity</h4><p style="font-size:11px">Under HIPAA: health plans, healthcare clearinghouses, and providers who transmit electronic transactions. Must follow HIPAA standards.</p></div>
+</div></div>
+
+<div class="qz" id="q2a"><h4>Under HIPAA, which entities are required to use standardized electronic transaction formats like the ANSI ASC X12 837 when submitting claims electronically?</h4>
+<div class="os">
+<button class="op" onclick="chk(this,true,'q2a','Correct! Covered entities — health plans, clearinghouses, and providers who conduct electronic transactions — must comply with HIPAA electronic transaction standards, including the X12 837 format for claims.','eclaim')">Covered entities: health plans, clearinghouses, and providers conducting electronic transactions</button>
+<button class="op" onclick="chk(this,false,'q2a','While providers who bill electronically must comply, HIPAA covered entities also include health plans and clearinghouses — not just provider offices.','eclaim')">Only physician offices that bill Medicare</button>
+<button class="op" onclick="chk(this,false,'q2a','Patients are not covered entities under HIPAA transaction standards. They are not submitting claims.','eclaim')">All patients with health insurance</button>
+<button class="op" onclick="chk(this,false,'q2a','Paper-only billing offices that do not transmit electronically may not be covered entities for transaction standards. The requirement applies to those conducting electronic transactions.','eclaim')">Only offices that also submit paper claims</button>
+</div><div class="fb" id="q2a-fb"></div></div>
+
+<div class="qz" id="q2b"><h4>A billing office uses a private network to securely transmit electronic claims to multiple payers. This type of network is known as a:</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q2b','A clearinghouse scrubs and reformats claims — it is not a network infrastructure itself.','eclaim')">Clearinghouse</button>
+<button class="op" onclick="chk(this,true,'q2b','Correct! A Value-Added Network (VAN) is a private network that facilitates secure EDI transactions between healthcare entities. It provides the infrastructure for transmitting claim data between providers, clearinghouses, and payers.','eclaim')">Value-Added Network (VAN)</button>
+<button class="op" onclick="chk(this,false,'q2b','The common data file contains standardized data elements, but it is not a transmission network.','eclaim')">Common data file</button>
+<button class="op" onclick="chk(this,false,'q2b','Patient portals are for patient access, not claim transmission between billing entities.','eclaim')">Patient portal</button>
+</div><div class="fb" id="q2b-fb"></div></div>
+
+<button class="btn-comp" id="c2" onclick="cs(2)">✓ Complete</button>
+<div class="nn"><button class="btn-pv" onclick="go(1)">← Flashcards</button><button class="btn-nx" onclick="go(3)">Next: Clearinghouse & EDI →</button></div>
+</div>
+
+<!-- P3 CLEARINGHOUSE -->
+<div class="pn" id="p3">
+<div class="sh" style="background:linear-gradient(135deg,rgba(255,240,226,.5),var(--card),rgba(221,240,253,.5))">
+<h2>Clearinghouse, EDI & Claim Files</h2>
+<p>Understand how claims are scrubbed, converted, and transmitted.</p>
+</div>
+
+<div class="gc"><h3>The Clearinghouse Role</h3>
+<p style="font-size:12px;color:var(--tx2)">A <strong>clearinghouse</strong> is an intermediary that receives electronic claims from providers, scrubs them for errors, reformats them to meet payer-specific requirements, and transmits them to the appropriate payer. Clearinghouses must meet accreditation standards and comply with HIPAA as covered entities.</p>
+<div class="cl info"><div class="cl-l">EDI = Electronic Data Interchange</div>The standardized electronic exchange of data between healthcare entities. EDI eliminates paper and ensures consistent formatting across different systems.</div>
+</div>
+
+<div class="qz" id="q3a"><h4>A clearinghouse receives a batch of claims from a billing office, checks them for formatting errors, converts them to the payer's required format, and forwards them. Which function does the clearinghouse primarily serve in this process?</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q3a','Adjudication is the payer\'s decision process — not the clearinghouse\'s role. The clearinghouse prepares claims for the payer.','clear')">Adjudication of claims for payment</button>
+<button class="op" onclick="chk(this,true,'q3a','Correct! The clearinghouse acts as an intermediary that scrubs claims for errors, converts them to standardized or payer-specific formats, and routes them to the correct payer. It does NOT make payment decisions — that is the payer\'s role during adjudication.','clear')">Intermediary that scrubs, converts, and routes claims to the correct payer</button>
+<button class="op" onclick="chk(this,false,'q3a','Payment posting is done by the billing office after receiving remittance — not by the clearinghouse.','clear')">Payment posting for the provider's patient accounts</button>
+<button class="op" onclick="chk(this,false,'q3a','Medical necessity is evaluated by the payer during adjudication, not by the clearinghouse during claim scrubbing.','clear')">Determination of medical necessity for services</button>
+</div><div class="fb" id="q3a-fb"></div></div>
+
+<div class="qz" id="q3b"><h4>A common data file used in claims processing contains standardized information elements that allow different systems to interpret claim data uniformly. Which of the following best describes why this standardization matters?</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q3b','Standardization doesn\'t eliminate the need for clearinghouses — they still perform scrubbing and routing.','clear')">It eliminates the need for clearinghouses entirely</button>
+<button class="op" onclick="chk(this,false,'q3b','Standardized data files deal with data elements, not medical documentation content.','clear')">It ensures that clinical notes are formatted consistently</button>
+<button class="op" onclick="chk(this,true,'q3b','Correct! A common data file standardizes the data elements so that different systems (provider, clearinghouse, payer) can interpret claim information consistently. Without standardization, data translation errors would cause widespread processing failures.','clear')">It ensures that providers, clearinghouses, and payers can all interpret the same data elements correctly</button>
+<button class="op" onclick="chk(this,false,'q3b','Standardization reduces errors but doesn\'t guarantee payment — payer adjudication still determines payment.','clear')">It guarantees that all claims will be paid as submitted</button>
+</div><div class="fb" id="q3b-fb"></div></div>
+
+<button class="btn-comp" id="c3" onclick="cs(3)">✓ Complete</button>
+<div class="nn"><button class="btn-pv" onclick="go(2)">← E-Claims</button><button class="btn-nx" onclick="go(4)">Next: Adjudication →</button></div>
+</div>
+
+<!-- P4 ADJUDICATION -->
+<div class="pn" id="p4">
+<div class="sh" style="background:linear-gradient(135deg,rgba(237,229,249,.5),var(--card),rgba(222,245,231,.5))">
+<h2>Claims Processing & Adjudication</h2>
+<p>Understand how payers review, evaluate, and decide on claims.</p>
+</div>
+
+<div class="gc"><h3>Adjudication Flow</h3>
+<div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;justify-content:center;margin:10px 0">
+<div style="background:var(--priL);padding:8px 12px;border-radius:var(--r);font-weight:700;color:var(--pri);font-size:10px;text-align:center">Claim<br>Received</div><span style="color:var(--tx3)">→</span>
+<div style="background:var(--tealL);padding:8px 12px;border-radius:var(--r);font-weight:700;color:var(--teal);font-size:10px;text-align:center">Eligibility<br>Verified</div><span style="color:var(--tx3)">→</span>
+<div style="background:var(--purL);padding:8px 12px;border-radius:var(--r);font-weight:700;color:var(--pur);font-size:10px;text-align:center">Benefits<br>Applied</div><span style="color:var(--tx3)">→</span>
+<div style="background:var(--grnL);padding:8px 12px;border-radius:var(--r);font-weight:700;color:var(--grn);font-size:10px;text-align:center">Coverage<br>Determined</div><span style="color:var(--tx3)">→</span>
+<div style="background:var(--goldL);padding:8px 12px;border-radius:var(--r);font-weight:700;color:#7A5C00;font-size:10px;text-align:center">Payment<br>Decision</div>
+</div>
+<div class="cl info"><div class="cl-l">Clean Claim</div>A claim that passes all edits with no errors. It is complete, accurate, and ready for adjudication. A clean claim does NOT guarantee payment — it means the claim is properly constructed.</div>
+</div>
+
+<div class="qz" id="q4a"><h4>During adjudication, a payer determines that a service is classified as a "noncovered benefit" under the patient's plan. What does this mean for the claim?</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q4a','A noncovered benefit is not an authorization issue — it is a plan exclusion. The service simply isn\'t included in the patient\'s benefit package.','adj')">The service requires prior authorization before it can be considered</button>
+<button class="op" onclick="chk(this,true,'q4a','Correct! A noncovered benefit means the patient\'s plan does not include this service in its covered benefits. The payer will not pay regardless of medical necessity. The patient may be responsible for the full charge depending on provider/patient agreements.','adj')">The patient's plan excludes this service from coverage — the payer will not pay for it</button>
+<button class="op" onclick="chk(this,false,'q4a','A noncovered benefit is different from a coding error. The service itself is excluded from the plan — it is a coverage issue, not a claim accuracy issue.','adj')">The claim has a coding error that needs correction before resubmission</button>
+<button class="op" onclick="chk(this,false,'q4a','Suspense means the claim is pending review. A noncovered benefit determination means the payer has already made a coverage decision.','adj')">The claim is placed in suspense pending additional review</button>
+</div><div class="fb" id="q4a-fb"></div></div>
+
+<div class="qz" id="q4b"><h4>A claim is placed in "suspense" during payer processing. This most likely indicates that:</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q4b','A claim in suspense has not been denied yet — it is pending further review or information.','adj')">The claim has been permanently denied and cannot be reconsidered</button>
+<button class="op" onclick="chk(this,true,'q4b','Correct! When a claim is in suspense, the payer has flagged it for additional review — it has not yet been fully adjudicated. The payer may need more information, medical records, or time to review. The claim is held rather than paid or denied.','adj')">The payer needs additional time or information before making a final determination</button>
+<button class="op" onclick="chk(this,false,'q4b','Suspense is a payer status, not a clearinghouse function. The claim already passed the clearinghouse.','adj')">The clearinghouse has not yet forwarded the claim to the payer</button>
+</div><div class="fb" id="q4b-fb"></div></div>
+
+<button class="btn-comp" id="c4" onclick="cs(4)">✓ Complete</button>
+<div class="nn"><button class="btn-pv" onclick="go(3)">← Clearinghouse</button><button class="btn-nx" onclick="go(5)">Next: COB & Coverage →</button></div>
+</div>
+
+<!-- P5 COB & COVERAGE -->
+<div class="pn" id="p5">
+<div class="sh" style="background:linear-gradient(135deg,rgba(255,248,222,.5),var(--card),rgba(221,240,253,.5))">
+<h2>COB, Attachments, Allowed Charges & Coverage</h2>
+<p>Understand how multiple payers coordinate and how charges and coverage decisions work.</p>
+</div>
+
+<div class="gc"><h3>Coordination of Benefits (COB)</h3>
+<p style="font-size:12px;color:var(--tx2)">When a patient has more than one insurance plan, <strong>COB rules</strong> determine which payer is primary and which is secondary. The primary payer processes first, and the secondary considers what remains. COB prevents overpayment — the combined payments should not exceed the allowed amount.</p>
+</div>
+
+<div class="qz" id="q5a"><h4>A claims attachment is additional documentation sent with or following a claim to support the services billed. In which of the following situations would a claims attachment most likely be required?</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q5a','Standard office visits typically do not require additional attachments unless specifically requested by the payer.','cob')">A routine office visit for a well-established diagnosis</button>
+<button class="op" onclick="chk(this,true,'q5a','Correct! Payers commonly request claims attachments when a service is unusual, high-cost, or requires clinical justification beyond what diagnosis and procedure codes provide — such as operative reports for complex procedures, medical records supporting medical necessity, or documentation for unlisted codes.','cob')">A complex surgical procedure where the payer requests operative notes to verify medical necessity</button>
+<button class="op" onclick="chk(this,false,'q5a','Copay collection is an administrative function at the front desk, not related to claims attachments.','cob')">When collecting a patient copay at the time of service</button>
+</div><div class="fb" id="q5a-fb"></div></div>
+
+<div class="qz" id="q5b"><h4>The "allowed charge" (or allowed amount) represents:</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q5b','The billed charge is what the provider charges — the allowed amount is typically less than the billed charge for contracted providers.','cob')">The total amount the provider bills for a service</button>
+<button class="op" onclick="chk(this,true,'q5b','Correct! The allowed charge is the maximum amount the payer will consider for a service based on their fee schedule or contracted rate. The difference between the billed charge and the allowed charge is the contractual adjustment (write-off) for PAR providers.','cob')">The maximum amount the payer considers payable for a service based on their fee schedule</button>
+<button class="op" onclick="chk(this,false,'q5b','The deductible is the patient\'s responsibility before insurance starts paying — it is not the same as the allowed charge.','cob')">The patient's annual deductible amount</button>
+</div><div class="fb" id="q5b-fb"></div></div>
+
+<div class="qz" id="q5c"><h4>An "unauthorized service" in the context of claims processing most likely refers to:</h4>
+<div class="os">
+<button class="op" onclick="chk(this,true,'q5c','Correct! An unauthorized service is one that required prior authorization from the payer but was performed without obtaining it. The payer may deny payment because the approval process was bypassed.','cob')">A service that required prior authorization but was performed without obtaining it</button>
+<button class="op" onclick="chk(this,false,'q5c','Coding by an uncertified person is a compliance issue — "unauthorized service" specifically refers to missing prior authorization in the claims context.','cob')">A service coded by an uncertified coder</button>
+<button class="op" onclick="chk(this,false,'q5c','Emergency services typically have different authorization rules. "Unauthorized" specifically means the required pre-approval was not obtained.','cob')">A service provided in an emergency setting</button>
+</div><div class="fb" id="q5c-fb"></div></div>
+
+<button class="btn-comp" id="c5" onclick="cs(5)">✓ Complete</button>
+<div class="nn"><button class="btn-pv" onclick="go(4)">← Adjudication</button><button class="btn-nx" onclick="go(6)">Next: Remittance →</button></div>
+</div>
+
+<!-- P6 REMITTANCE -->
+<div class="pn" id="p6">
+<div class="sh" style="background:linear-gradient(135deg,rgba(222,245,231,.5),var(--card),rgba(237,229,249,.5))">
+<h2>Remittance, EOB/ERA & Payment Thinking</h2>
+<p>Learn to interpret what the payer tells you about their payment decision.</p>
+</div>
+
+<div class="gc"><h3>ERA vs EOB</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+<div style="background:var(--priL);padding:10px;border-radius:var(--r);border-left:3px solid var(--pri)"><h4 style="color:var(--pri);font-size:12px">Electronic Remittance Advice (ERA)</h4><p style="font-size:11px">The <strong>electronic</strong> version of the payment explanation sent to the provider. Uses ANSI X12 835 format. Contains what was paid, denied, adjusted, and why.</p></div>
+<div style="background:var(--tealL);padding:10px;border-radius:var(--r);border-left:3px solid var(--teal)"><h4 style="color:var(--teal);font-size:12px">Explanation of Benefits (EOB)</h4><p style="font-size:11px">The <strong>paper</strong> explanation sent to the patient showing what the insurance paid, what the patient owes, and why. Similar information as ERA but patient-facing.</p></div>
+</div></div>
+
+<div class="qz" id="q6a"><h4>The billing office receives an ERA showing a claim was processed with the following: Billed $400, Allowed $320, Paid $256, Patient coinsurance $64, Contractual adjustment $80. What standard format is this ERA transmitted in?</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q6a','The X12 837 is for claim SUBMISSION (outgoing). The ERA uses a different transaction standard for payment responses.','rem')">ANSI X12 837 — the claim submission format</button>
+<button class="op" onclick="chk(this,true,'q6a','Correct! The ERA uses the ANSI X12 835 format — the standardized electronic remittance transaction. The 837 is for submitting claims; the 835 is for receiving payment information. Both are HIPAA-mandated transaction standards.','rem')">ANSI X12 835 — the electronic remittance advice format</button>
+<button class="op" onclick="chk(this,false,'q6a','The CMS-1500 is a claim form, not a remittance format.','rem')">CMS-1500 format</button>
+</div><div class="fb" id="q6a-fb"></div></div>
+
+<div class="qz" id="q6b"><h4>A remittance advice shows a payment of $0 with the remark "applied to deductible." The billing specialist should interpret this as:</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q6b','This is not a claim error — the payer correctly processed the claim and applied the amount to the deductible. This is normal adjudication.','rem')">An error requiring claim resubmission</button>
+<button class="op" onclick="chk(this,true,'q6b','Correct! The payer processed the claim normally but the allowed amount was applied to the patient\'s unmet deductible. The patient owes the deductible amount. This is standard adjudication — not a denial or error.','rem')">Normal processing — the patient is responsible for the deductible amount and should be billed accordingly</button>
+<button class="op" onclick="chk(this,false,'q6b','This is not a coverage exclusion — the service IS covered, but the patient hasn\'t met their deductible yet.','rem')">A coverage exclusion requiring an appeal</button>
+</div><div class="fb" id="q6b-fb"></div></div>
+
+<button class="btn-comp" id="c6" onclick="cs(6)">✓ Complete</button>
+<div class="nn"><button class="btn-pv" onclick="go(5)">← COB</button><button class="btn-nx" onclick="go(7)">Next: Collections →</button></div>
+</div>
+
+<!-- P7 COLLECTIONS -->
+<div class="pn" id="p7">
+<div class="sh" style="background:linear-gradient(135deg,rgba(252,224,234,.5),var(--card),rgba(255,240,226,.5))">
+<h2>Collections & Account Follow-Up</h2>
+<p>Understand what happens when balances go unpaid and how offices manage delinquent accounts.</p>
+</div>
+
+<div class="gc"><h3>Collections Essentials</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+<div style="background:var(--orgL);padding:10px;border-radius:var(--r);border-left:3px solid var(--org)"><h4 style="color:var(--org);font-size:12px">Delinquent Account</h4><p style="font-size:11px">A patient account with a balance that is past due — the patient has not paid within the expected timeframe.</p></div>
+<div style="background:var(--redL);padding:10px;border-radius:var(--r);border-left:3px solid var(--red)"><h4 style="color:var(--red);font-size:12px">Bad Debt</h4><p style="font-size:11px">An account balance that the practice has determined is uncollectable — all reasonable collection efforts have been exhausted.</p></div>
+</div></div>
+
+<div class="qz" id="q7a"><h4>A patient's account has an outstanding balance of $240 that is 120 days past due despite multiple statements and a phone call. The patient has not responded. According to standard collections workflow, what would typically happen next?</h4>
+<div class="os">
+<button class="op" onclick="chk(this,false,'q7a','120 days past due is not the point to write off without further effort — the account should be escalated first.','coll')">Immediately write off the balance as bad debt</button>
+<button class="op" onclick="chk(this,true,'q7a','Correct! After internal collection efforts have been exhausted (statements, calls), the account may be referred to a third-party collection agency before being written off as bad debt. The practice should follow its collection policy and applicable regulations regarding patient notification before sending to collections.','coll')">Refer the account to a third-party collection agency following the practice\'s collection policy</button>
+<button class="op" onclick="chk(this,false,'q7a','Resubmitting the claim to insurance won\'t help — this is a patient balance, not an insurance issue.','coll')">Resubmit the claim to the patient\'s insurance</button>
+</div><div class="fb" id="q7a-fb"></div></div>
+
+<button class="btn-comp" id="c7" onclick="cs(7)">✓ Complete</button>
+<div class="nn"><button class="btn-pv" onclick="go(6)">← Remittance</button><button class="btn-nx" onclick="go(8)">Next: Practice Arena →</button></div>
+</div>
+
+<!-- P8 PRACTICE ARENA -->
+<div class="pn" id="p8">
+<div class="sh" style="background:linear-gradient(135deg,rgba(221,240,253,.5),var(--card),rgba(222,245,231,.5))">
+<h2>Practice Arena</h2>
+<p>CBCS-style questions drawn from chapter concepts. Every answer includes a rationale.</p>
+</div>
+
+<div class="qz" id="pa1"><h4>1. Which of the following is a covered entity under HIPAA that must comply with electronic transaction standards?</h4><div class="os">
+<button class="op" onclick="chk(this,false,'pa1','Pharmaceutical manufacturers are not covered entities under HIPAA transaction standards.','prac')">Pharmaceutical manufacturer</button>
+<button class="op" onclick="chk(this,true,'pa1','Correct! Healthcare clearinghouses are covered entities that must comply with HIPAA transaction standards. They receive, process, and transmit claims data.','prac')">Healthcare clearinghouse</button>
+<button class="op" onclick="chk(this,false,'pa1','Medical device companies are not covered entities for HIPAA transaction purposes.','prac')">Medical device company</button>
+<button class="op" onclick="chk(this,false,'pa1','Patients are not covered entities — they are the subjects of protected health information.','prac')">The patient</button>
+</div><div class="fb" id="pa1-fb"></div></div>
+
+<div class="qz" id="pa2"><h4>2. A payer determines that a service is not included in the patient's benefit plan. This is classified as a:</h4><div class="os">
+<button class="op" onclick="chk(this,false,'pa2','A deductible is the patient\'s out-of-pocket amount before insurance pays — not a coverage exclusion.','prac')">Deductible</button>
+<button class="op" onclick="chk(this,true,'pa2','Correct! A noncovered benefit is a service that the patient\'s plan does not include in its benefit package. The payer will not pay for it regardless of medical necessity.','prac')">Noncovered benefit</button>
+<button class="op" onclick="chk(this,false,'pa2','Suspense means the claim is pending review — not that the service is excluded.','prac')">Claim in suspense</button>
+<button class="op" onclick="chk(this,false,'pa2','Coinsurance is the patient\'s percentage share of covered services — not an exclusion.','prac')">Coinsurance</button>
+</div><div class="fb" id="pa2-fb"></div></div>
+
+<div class="qz" id="pa3"><h4>3. The ANSI X12 835 transaction standard is used for:</h4><div class="os">
+<button class="op" onclick="chk(this,false,'pa3','The 837 is for claim submission. The 835 is for remittance.','prac')">Submitting claims electronically</button>
+<button class="op" onclick="chk(this,true,'pa3','Correct! The X12 835 is the standard for Electronic Remittance Advice (ERA) — the payer\'s electronic response showing payment details, adjustments, and reasons.','prac')">Electronic Remittance Advice (ERA)</button>
+<button class="op" onclick="chk(this,false,'pa3','Eligibility verification uses a different transaction standard (270/271).','prac')">Verifying patient eligibility</button>
+<button class="op" onclick="chk(this,false,'pa3','Referral authorization uses a different transaction standard (278).','prac')">Requesting prior authorization</button>
+</div><div class="fb" id="pa3-fb"></div></div>
+
+<div class="qz" id="pa4"><h4>4. Coordination of Benefits primarily prevents:</h4><div class="os">
+<button class="op" onclick="chk(this,false,'pa4','COB doesn\'t prevent claim submission — it determines payer order and prevents overpayment.','prac')">Providers from submitting claims</button>
+<button class="op" onclick="chk(this,true,'pa4','Correct! COB ensures that when a patient has multiple insurance plans, the combined payments do not exceed the total allowed amount for the service — preventing duplicate payment or overpayment.','prac')">Overpayment when a patient has multiple insurance plans</button>
+<button class="op" onclick="chk(this,false,'pa4','Patients can still have multiple plans — COB coordinates how they pay, it doesn\'t prevent dual coverage.','prac')">Patients from having two insurance plans</button>
+</div><div class="fb" id="pa4-fb"></div></div>
+
+<div class="qz" id="pa5"><h4>5. A claim passes all clearinghouse edits and is forwarded to the payer. The payer then reviews the claim, checks benefits, and makes a payment determination. The payer's review process is called:</h4><div class="os">
+<button class="op" onclick="chk(this,false,'pa5','Claim scrubbing is done by the clearinghouse, not the payer.','prac')">Claim scrubbing</button>
+<button class="op" onclick="chk(this,false,'pa5','Claim submission is the provider\'s action of sending the claim — not the payer\'s review.','prac')">Claim submission</button>
+<button class="op" onclick="chk(this,true,'pa5','Correct! Claims adjudication is the payer\'s process of reviewing, evaluating, and making a payment determination on a submitted claim. It includes eligibility verification, benefit application, and coverage decisions.','prac')">Claims adjudication</button>
+<button class="op" onclick="chk(this,false,'pa5','Remittance is the RESULT of adjudication — the payment explanation sent back. Adjudication is the process itself.','prac')">Remittance processing</button>
+</div><div class="fb" id="pa5-fb"></div></div>
+
+<button class="btn-comp" id="c8" onclick="cs(8)">✓ Complete</button>
+<div class="nn"><button class="btn-pv" onclick="go(7)">← Collections</button><button class="btn-nx" onclick="go(9)">Next: Timed Challenge →</button></div>
+</div>
+
+<!-- P9 CHALLENGE -->
+<div class="pn" id="p9">
+<div class="sh" style="background:linear-gradient(135deg,rgba(237,229,249,.5),var(--card),rgba(252,224,234,.5))">
+<h2>⚡ Timed Challenge</h2>
+<p>12 questions. 2.5 minutes. Full study guide after completion.</p>
+</div>
+<div style="text-align:center;margin:14px 0">
+<div class="timer" id="cT">2:30</div>
+<button class="btn-nx" id="cSt" onclick="startC()">⚡ Start Challenge</button>
+</div>
+<div id="cQ" style="display:none"><div class="qz" style="border-color:var(--pur)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+<h4 id="cqT" style="margin:0;font-size:12px">Q</h4><span class="bg bg-p" id="cqN">Q1</span>
+</div>
+<p id="cqP" style="font-size:12px;margin-bottom:6px;line-height:1.5"></p>
+<div class="os" id="cqO"></div>
+<div class="fb" id="cq-fb"></div>
+</div></div>
+<div id="cD" style="display:none;padding:14px">
+<div style="text-align:center;margin-bottom:16px"><div style="font-size:36px">🏆</div><h3 style="font-family:var(--hd)">Challenge Complete!</h3>
+<p style="font-size:18px;margin:6px 0">Score: <strong id="cSc">0</strong>/12</p>
+<button class="btn-nx" onclick="startC()" style="margin-top:8px">🔄 Retry</button></div>
+<div class="gc" style="border:2px solid var(--pur)"><h3 style="color:var(--pur)">📖 Study Guide — All Questions & Answers</h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Review every question with the correct answer and rationale.</p>
+<div id="studyGuide"></div></div>
+</div>
+<button class="btn-comp" id="c9" onclick="cs(9)">✓ Complete</button>
+<div class="nn"><button class="btn-pv" onclick="go(8)">← Practice</button><button class="btn-nx" onclick="go(10)">Next: Summary →</button></div>
+</div>
+
+<!-- P10 SUMMARY -->
+<div class="pn" id="p10">
+<div class="sh" style="background:linear-gradient(135deg,rgba(255,248,222,.5),var(--card),rgba(222,245,231,.5))">
+<h2>🏆 Summary & Amplify Export</h2>
+<p>Review, reflect, and export your results.</p>
+</div>
+<div style="text-align:center;padding:14px;margin-bottom:10px;background:linear-gradient(135deg,rgba(255,248,222,.5),var(--card),rgba(222,245,231,.5));border:2px solid var(--gold);border-radius:var(--r3)">
+<div style="font-size:36px">🏅</div><h3 style="font-family:var(--hd);color:var(--grn2)">Claims Processing Lab Complete!</h3></div>
+
+<div class="sum-box"><h3>📊 Performance</h3>
+<div class="sum-r"><span class="sl">Score</span><span class="sv" id="ss1">0</span></div>
+<div class="sum-r"><span class="sl">Correct</span><span class="sv" id="ss2">0</span></div>
+<div class="sum-r"><span class="sl">Sections</span><span class="sv" id="ss3">0</span></div>
+<div class="sum-r"><span class="sl">Strongest</span><span class="sv" id="ss4">—</span></div>
+<div class="sum-r"><span class="sl">Review</span><span class="sv" id="ss5">—</span></div>
+<div class="sum-r"><span class="sl">Focus</span><span class="sv" id="ss6">—</span></div>
+<div class="sum-r"><span class="sl">Flashcards Mastered</span><span class="sv" id="ss7">—</span></div>
+</div>
+
+<div class="gc"><h3>✍️ Reflection</h3>
+<div style="margin-bottom:8px"><label style="font-size:10px;font-weight:700;color:var(--pri)">What did you learn?</label><textarea id="r1" placeholder="Key takeaways..."></textarea></div>
+<div style="margin-bottom:8px"><label style="font-size:10px;font-weight:700;color:var(--pri)">What was challenging?</label><textarea id="r2" placeholder="Hardest parts..."></textarea></div>
+<div style="margin-bottom:8px"><label style="font-size:10px;font-weight:700;color:var(--pri)">What still confuses you?</label><textarea id="r3" placeholder="Questions remaining..."></textarea></div>
+<button class="btn-copy" onclick="addRef()" style="background:var(--grn)">✍️ Add Reflection to Summary</button>
+<div id="refMsg" style="display:none;margin-top:4px;font-size:10px;color:var(--grn);font-weight:600">✅ Added!</div>
+</div>
+
+<div class="gc" style="border:2px solid var(--pur)"><h3 style="color:var(--pur)">📋 Copy for Amplify</h3>
+<button class="btn-copy" onclick="genSum()" style="margin-bottom:8px">📝 Generate Summary</button>
+<div class="copy-a" id="cpA" style="display:none"></div>
+<button class="btn-copy" id="cpB" onclick="cpSum()" style="display:none;margin-top:6px;background:var(--grn)">📋 COPY SUMMARY FOR AMPLIFY</button>
+<div id="cpM" style="display:none;margin-top:4px;padding:6px 10px;background:var(--grnL);border:1px solid #A5D6A7;border-radius:var(--r);font-size:11px;color:var(--grn2);font-weight:700;text-align:center">✅ Copied! Paste into Amplify.</div>
+</div>
+<div class="nn"><button class="btn-pv" onclick="go(9)">← Challenge</button><span></span></div>
+</div>
+
+</main>
+<footer class="ftr">© Hilary Homaii. All rights reserved.</footer>
+
+<script>
+let sc=0,strk=0,bdg=0,sOn=true,cor=0,refAdded=false,knowCount=0,studyCount=0;
+const cats={eclaim:0,clear:0,adj:0,cob:0,rem:0,coll:0,prac:0};
+const catMax={eclaim:2,clear:2,adj:2,cob:3,rem:2,coll:1,prac:5};
+const comp=new Set();
+let actx=null;
+function gC(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx}
+function tn(f,d,t='sine',v=.07){if(!sOn)return;try{const c=gC(),o=c.createOscillator(),g=c.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}}
+function sOk(){tn(523,.08);setTimeout(()=>tn(659,.08),50);setTimeout(()=>tn(784,.1),100)}
+function sNo(){tn(330,.14,'sine',.05)}
+function sDn(){tn(523,.06);setTimeout(()=>tn(659,.06),35);setTimeout(()=>tn(784,.06),70);setTimeout(()=>tn(1047,.12),105)}
+function tS(){sOn=!sOn;document.getElementById('sB').textContent=sOn?'🔊':'🔇'}
+
+function aP(n,cat){sc+=n;cor++;if(cat)cats[cat]=(cats[cat]||0)+1;strk++;document.getElementById('sN').textContent=sc;document.getElementById('kN').textContent=strk;const t=document.getElementById('toast');t.textContent=`+${n}`;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1100);sOk()}
+function rS(){strk=0;document.getElementById('kN').textContent=0}
+
+function go(i){
+  document.querySelectorAll('.nb').forEach(b=>b.classList.toggle('a',parseInt(b.dataset.t)===i));
+  document.querySelectorAll('.pn').forEach(p=>{const pi=parseInt(p.id.replace('p',''));p.classList.toggle('a',pi===i)});
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('gF').style.width=Math.round((i+1)/11*100)+'%';
+  if(i===10)genAutoSum();
+}
+document.querySelectorAll('.nb').forEach(b=>b.addEventListener('click',()=>go(parseInt(b.dataset.t))));
+
+function chk(btn,correct,qid,rat,cat){
+  const par=btn.parentElement;const fb=document.getElementById(qid+'-fb');
+  par.querySelectorAll('.op').forEach(o=>o.classList.add('x'));
+  if(correct){btn.classList.add('c');fb.className='fb c';fb.textContent='✓ '+rat;aP(10,cat)}
+  else{btn.classList.add('w');fb.className='fb w';fb.textContent='✗ '+rat;rS();sNo()}
+}
+
+function cs(i){if(comp.has(i))return;comp.add(i);const b=document.getElementById('c'+i);if(b){b.classList.add('dn');b.textContent='✓ Done!'}document.querySelector(`.nb[data-t="${i}"]`)?.classList.add('d');aP(20);sDn()}
+
+// ===== FLASHCARD STUDIO =====
+const fcData=[
+{term:'Claims Submission',def:'The process of sending a completed claim to the payer for processing and payment.',clue:'The starting point of revenue recovery — submit right the first time.'},
+{term:'Electronic Data Interchange (EDI)',def:'The standardized electronic exchange of healthcare data between entities using agreed-upon formats.',clue:'Think: digital highway for claim data. Replaces paper and fax.'},
+{term:'Value-Added Network (VAN)',def:'A private network that facilitates secure EDI transactions between healthcare trading partners.',clue:'The infrastructure that carries EDI data — like a secure postal service for electronic claims.'},
+{term:'Clearinghouse',def:'An intermediary that receives, scrubs, reformats, and routes electronic claims between providers and payers.',clue:'Quality control checkpoint — catches errors BEFORE the payer sees the claim.'},
+{term:'Covered Entity',def:'Under HIPAA: health plans, healthcare clearinghouses, and providers who conduct electronic transactions.',clue:'If you transmit electronic health transactions, you\'re likely a covered entity with HIPAA obligations.'},
+{term:'Clean Claim',def:'A claim with no errors — complete, accurate, and ready for adjudication. Does NOT guarantee payment.',clue:'Clean = properly constructed. But payer can still deny for coverage, auth, or medical necessity reasons.'},
+{term:'Claims Adjudication',def:'The payer\'s process of reviewing, evaluating, and making a payment determination on a claim.',clue:'The payer\'s decision-making process: verify eligibility → apply benefits → determine coverage → decide payment.'},
+{term:'Noncovered Benefit',def:'A service that is excluded from the patient\'s benefit plan — the payer will not pay regardless of medical necessity.',clue:'Plan exclusion, not a claim error. The service simply isn\'t in the benefit package.'},
+{term:'Coordination of Benefits (COB)',def:'Rules that determine payer order and prevent overpayment when a patient has multiple insurance plans.',clue:'Primary pays first, secondary considers remainder. Combined payments shouldn\'t exceed the allowed amount.'},
+{term:'Claims Attachment',def:'Additional documentation (operative notes, medical records) sent with or following a claim to support services billed.',clue:'Extra proof — sent when the payer needs more information than codes alone provide.'},
+{term:'Allowed Charge',def:'The maximum amount the payer considers payable for a service based on their fee schedule or contract.',clue:'The real number that matters — everything else (coinsurance, write-off) is calculated from this.'},
+{term:'Electronic Remittance Advice (ERA)',def:'The electronic payment explanation from the payer showing what was paid, denied, adjusted, and why. Uses X12 835 format.',clue:'The payer\'s answer to your claim — in electronic format. 835 = remittance (837 = submission).'},
+{term:'Suspense',def:'A claim status indicating the payer needs more time or information before making a final determination.',clue:'Not denied, not paid — just held. The payer is still deciding.'},
+{term:'Delinquent Account',def:'A patient account with a balance that is past due beyond the expected payment timeframe.',clue:'The clock is ticking — follow up before it becomes bad debt.'},
+{term:'Bad Debt',def:'An account balance determined to be uncollectable after all reasonable collection efforts have been exhausted.',clue:'The last stage — revenue is written off. Prevention through timely follow-up is key.'},
+{term:'Common Data File',def:'A standardized set of data elements that allows different systems to interpret claim information uniformly.',clue:'The shared language — ensures providers, clearinghouses, and payers all read the same data the same way.'}
+];
+
+function buildFlashcards(){
+  const grid=document.getElementById('fcGrid');
+  grid.innerHTML='';
+  fcData.forEach((fc,i)=>{
+    const div=document.createElement('div');
+    div.className='fc';div.id='fc'+i;
+    div.innerHTML=`
+      <div class="fc-term">${fc.term}</div>
+      <div class="fc-def">${fc.def}</div>
+      <div class="fc-clue">💡 ${fc.clue}</div>
+      <div class="fc-reveal" onclick="revealFC(${i})">👆 Tap to Reveal</div>
+      <div class="fc-btns" style="display:none" id="fcb${i}">
+        <button class="fc-btn know" onclick="sortFC(${i},'know')">✓ I Know This</button>
+        <button class="fc-btn study" onclick="sortFC(${i},'study')">📖 Still Studying</button>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function revealFC(i){
+  const fc=document.getElementById('fc'+i);
+  fc.classList.add('revealed');
+  document.getElementById('fcb'+i).style.display='flex';
+}
+
+function sortFC(i,type){
+  const fc=document.getElementById('fc'+i);
+  fc.classList.remove('sorted-know','sorted-study');
+  fc.classList.add(type==='know'?'sorted-know':'sorted-study');
+  document.getElementById('fcb'+i).innerHTML=type==='know'?'<span style="font-size:10px;color:var(--grn);font-weight:700">✓ Mastered</span>':'<span style="font-size:10px;color:var(--org);font-weight:700">📖 Reviewing</span>';
+  // Recount
+  knowCount=document.querySelectorAll('.fc.sorted-know').length;
+  studyCount=document.querySelectorAll('.fc.sorted-study').length;
+  document.getElementById('knowCt').textContent=knowCount;
+  document.getElementById('studyCt').textContent=studyCount;
+  sOk();
+}
+
+buildFlashcards();
+
+// ===== RANDOMIZE STATIC QUIZ ANSWERS =====
+// This shuffles the answer buttons in every regular tab quiz while preserving each button's original onclick logic.
+// The correct answer is no longer tied to A/B/C/D, so students cannot predict the pattern.
+function shuffleArrayInPlace(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function randomizeStaticQuizAnswers(){
+  document.querySelectorAll('.qz .os').forEach(os=>{
+    if(os.id==='cqO')return;
+    const buttons=Array.from(os.querySelectorAll(':scope > button.op'));
+    if(buttons.length<2)return;
+    shuffleArrayInPlace(buttons);
+    buttons.forEach((btn,index)=>{
+      btn.dataset.choiceLetter=String.fromCharCode(65+index);
+      os.appendChild(btn);
+    });
+  });
+}
+randomizeStaticQuizAnswers();
+
+// ===== CHALLENGE =====
+const cQs=[
+{q:'Under HIPAA, which of the following is classified as a covered entity required to follow electronic transaction standards?',o:['A pharmaceutical company','A healthcare clearinghouse','A medical device manufacturer','The patient'],a:1,r:'Clearinghouses are covered entities that must comply with HIPAA electronic transaction standards.'},
+{q:'The ANSI X12 837 transaction standard is used for:',o:['Electronic remittance','Claim submission','Eligibility inquiry','Prior authorization'],a:1,r:'837 = claim submission. 835 = remittance. 270/271 = eligibility. 278 = authorization.'},
+{q:'A Value-Added Network (VAN) primarily serves as:',o:['A payer adjudication system','A secure network for EDI transactions','A patient portal','A clearinghouse'],a:1,r:'A VAN is the infrastructure for secure electronic data interchange between trading partners.'},
+{q:'Claims adjudication is the process by which:',o:['The provider submits claims electronically','The clearinghouse scrubs claims for errors','The payer reviews and determines payment on a claim','The patient pays their copay'],a:2,r:'Adjudication = payer\'s review and payment decision process.'},
+{q:'A "noncovered benefit" means:',o:['The service needs prior authorization','The service is excluded from the plan benefits','The claim has a formatting error','The patient has secondary insurance'],a:1,r:'Noncovered = the plan does not include this service. Payer won\'t pay.'},
+{q:'The allowed charge represents:',o:['The provider\'s full billed amount','The maximum the payer will consider based on their fee schedule','The patient\'s deductible','The copay amount'],a:1,r:'Allowed charge = payer\'s maximum payable amount for the service.'},
+{q:'COB rules primarily prevent:',o:['Claim submission','Overpayment with multiple insurances','Patient registration','Coding errors'],a:1,r:'COB coordinates multiple payers to prevent overpayment.'},
+{q:'A claim in "suspense" status means:',o:['It has been paid in full','It was permanently denied','The payer needs more time or information','It was rejected by the clearinghouse'],a:2,r:'Suspense = held for further review. Not yet a final decision.'},
+{q:'The ERA uses which ANSI transaction standard?',o:['X12 837','X12 835','X12 270','X12 278'],a:1,r:'835 = Electronic Remittance Advice. 837 = claim submission.'},
+{q:'A claims attachment is typically required when:',o:['Every claim is submitted','The payer needs additional clinical documentation beyond codes','The patient changes address','The provider updates their NPI'],a:1,r:'Attachments provide extra documentation the payer needs for adjudication.'},
+{q:'A delinquent account that has exhausted all collection efforts becomes:',o:['A clean claim','Bad debt','A noncovered benefit','A suspense item'],a:1,r:'Bad debt = uncollectable balance after all reasonable efforts exhausted.'},
+{q:'What is the primary function of a healthcare clearinghouse?',o:['Adjudicating claims and making payment decisions','Scrubbing, reformatting, and routing claims between providers and payers','Providing patient care','Setting insurance premiums'],a:1,r:'Clearinghouse = intermediary that scrubs and routes claims. Does NOT adjudicate.'}
+];
+let cIdx=0,cCor=0,cInt=null;
+let activeChallengeQuestions=[];
+
+function makeChallengeRound(){
+  // Copy the challenge questions, randomize question order, and randomize answer order inside each question.
+  activeChallengeQuestions=cQs.map(q=>{
+    const opts=q.o.map((text,index)=>({text:text,correct:index===q.a}));
+    shuffleArrayInPlace(opts);
+    return {
+      q:q.q,
+      r:q.r,
+      opts:opts,
+      a:opts.findIndex(opt=>opt.correct)
+    };
+  });
+  shuffleArrayInPlace(activeChallengeQuestions);
+}
+
+function startC(){
+  cIdx=0;cCor=0;makeChallengeRound();
+  document.getElementById('cD').style.display='none';document.getElementById('cSt').style.display='none';
+  document.getElementById('cQ').style.display='block';
+  showCQ();let s=150;document.getElementById('cT').textContent='2:30';clearInterval(cInt);
+  cInt=setInterval(()=>{s--;const m=Math.floor(s/60),sec=s%60;document.getElementById('cT').textContent=`${m}:${sec.toString().padStart(2,'0')}`;if(s<=0){clearInterval(cInt);endC()}},1000);
+}
+function showCQ(){
+  if(cIdx>=activeChallengeQuestions.length){endC();return}
+  const q=activeChallengeQuestions[cIdx];document.getElementById('cqN').textContent=`Q${cIdx+1}/${activeChallengeQuestions.length}`;
+  document.getElementById('cqP').textContent=q.q;const od=document.getElementById('cqO');od.innerHTML='';
+  document.getElementById('cq-fb').className='fb';document.getElementById('cq-fb').textContent='';
+  q.opts.forEach((opt,i)=>{const b=document.createElement('button');b.className='op';b.textContent=`${String.fromCharCode(65+i)}) ${opt.text}`;b.onclick=()=>cAns(i);od.appendChild(b)});
+}
+function cAns(i){
+  const q=activeChallengeQuestions[cIdx];const fb=document.getElementById('cq-fb');
+  const btns=document.querySelectorAll('#cqO .op');
+  btns.forEach(b=>b.classList.add('x'));
+  if(i===q.a){btns[i].classList.add('c');fb.className='fb c';fb.textContent='✓ '+q.r;cCor++;aP(10)}
+  else{btns[i].classList.add('w');if(btns[q.a])btns[q.a].classList.add('c');fb.className='fb w';fb.textContent='✗ '+q.r;rS();sNo()}
+  setTimeout(()=>{cIdx++;showCQ()},1300);
+}
+function endC(){
+  clearInterval(cInt);document.getElementById('cQ').style.display='none';document.getElementById('cD').style.display='block';
+  document.getElementById('cSc').textContent=cCor;document.getElementById('cSt').style.display='inline-flex';
+  if(cCor>=10){bdg++;document.getElementById('bN').textContent=bdg;sDn()}
+  // Build study guide using the randomized answer order from this attempt.
+  const guide=document.getElementById('studyGuide');let html='';
+  activeChallengeQuestions.forEach((q,i)=>{
+    html+=`<div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);padding:12px;margin-bottom:8px">
+      <span style="font-size:9px;font-weight:700;color:var(--pur);background:var(--purL);padding:2px 6px;border-radius:5px">Q${i+1}</span>
+      <p style="font-size:11px;font-weight:600;margin:6px 0;line-height:1.4">${q.q}</p>
+      ${q.opts.map((opt,oi)=>`<div style="padding:3px 8px;margin:2px 0;border-radius:5px;font-size:10px;${oi===q.a?'background:var(--grnL);border:1px solid #A5D6A7;color:var(--grn2);font-weight:700':'background:var(--card);border:1px solid var(--bdr);color:var(--tx2)'}">${String.fromCharCode(65+oi)}) ${opt.text}${oi===q.a?' ✓':''}</div>`).join('')}
+      <div style="background:var(--grnL);border:1px solid #A5D6A7;border-radius:var(--r);padding:6px 8px;margin-top:6px;font-size:9px;color:var(--grn2)"><strong>Answer: ${String.fromCharCode(65+q.a)}</strong> — ${q.r}</div>
+    </div>`;
+  });
+  guide.innerHTML=html;
+}
+
+// SUMMARY
+function genAutoSum(){
+  document.getElementById('ss1').textContent=sc+' pts';document.getElementById('ss2').textContent=cor;document.getElementById('ss3').textContent=comp.size+'/9';
+  document.getElementById('ss7').textContent=knowCount+' mastered / '+studyCount+' reviewing';
+  const cn={eclaim:'Electronic Claims',clear:'Clearinghouse & EDI',adj:'Adjudication Logic',cob:'COB & Coverage',rem:'Remittance & ERA',coll:'Collections',prac:'Practice Questions'};
+  let mx='',mxV=0,mn='',mnV=Infinity;
+  Object.keys(cats).forEach(k=>{const p=catMax[k]?cats[k]/catMax[k]:0;if(p>mxV){mxV=p;mx=k}if(p<mnV){mnV=p;mn=k}});
+  document.getElementById('ss4').textContent=cn[mx]||'—';document.getElementById('ss5').textContent=cn[mn]||'—';
+  const foc={eclaim:'Review EDI, VAN, covered entity, and X12 standards',clear:'Study clearinghouse functions vs payer adjudication',adj:'Practice clean claim logic, suspense, and noncovered benefits',cob:'Review COB rules, allowed charges, and authorization requirements',rem:'Study ERA (835) vs EOB and payment interpretation',coll:'Review delinquent accounts, bad debt, and collection workflow',prac:'Work through more CBCS-style questions'};
+  document.getElementById('ss6').textContent=foc[mn]||'Review all sections';
+}
+
+let reflectionText='';
+function addRef(){
+  reflectionText=`What I learned: ${document.getElementById('r1')?.value||'(not answered)'}\nWhat was challenging: ${document.getElementById('r2')?.value||'(not answered)'}\nWhat still confuses me: ${document.getElementById('r3')?.value||'(not answered)'}`;
+  refAdded=true;document.getElementById('refMsg').style.display='block';setTimeout(()=>document.getElementById('refMsg').style.display='none',3000);
+}
+
+function genSum(){
+  genAutoSum();if(!refAdded)addRef();
+  const txt=`CLAIMS PROCESSING & ADJUDICATION LAB — SUMMARY
+=============================================
+Score: ${sc} pts | Correct: ${cor} | Sections: ${comp.size}/9
+Flashcards: ${knowCount} mastered, ${studyCount} reviewing
+Strongest: ${document.getElementById('ss4').textContent}
+Review: ${document.getElementById('ss5').textContent}
+Focus: ${document.getElementById('ss6').textContent}
+
+REFLECTION
+---------------------------------------------
+${reflectionText}
+=============================================`;
+  document.getElementById('cpA').textContent=txt;document.getElementById('cpA').style.display='block';document.getElementById('cpB').style.display='inline-flex';
+}
+function cpSum(){
+  const t=document.getElementById('cpA').textContent;
+  navigator.clipboard.writeText(t).then(()=>{document.getElementById('cpM').style.display='block';setTimeout(()=>document.getElementById('cpM').style.display='none',4000)}).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a);document.getElementById('cpM').style.display='block';setTimeout(()=>document.getElementById('cpM').style.display='none',4000)});
+}
+</script>
+</body>
+</html>
